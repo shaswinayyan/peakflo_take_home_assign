@@ -2,8 +2,6 @@
 
 **To:** CFO, Peakflo Client
 **From:** Business Analyst
-**Date:** May 22, 2024
-**Subject:** Moving from "Gut Feeling" to Precision Collections
 
 ## 1. Top 3 Recommendations
 We recommend a phased transformation of the AR process. Each recommendation balances immediate cash impact against operational effort.
