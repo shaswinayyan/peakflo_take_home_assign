@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Peakflo Chronicles - Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="web_data.js"></script>
+    <style>
+        /* NYT Aesthetic Variables */
+        :root {
+            --font-head: 'Georgia', 'Times New Roman', serif;
+            --font-body: 'Georgia', 'Times New Roman', serif;
+            --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --nyt-black: #121212;
+            --nyt-gray: #727272;
+            --bg: #ffffff;
+            --accent: #b71c1c;
+            /* Deep Red */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--nyt-black);
+            font-family: var(--font-body);
+            line-height: 1.6;
+        }
+
+        /* Layout */
+        article {
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-head);
+            font-size: 2.8rem;
+            font-weight: 700;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .kicker {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .byline {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--nyt-black);
+            margin: 1rem 0 3rem 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .byline span {
+            color: var(--nyt-gray);
+            font-weight: 400;
+        }
+
+        h2 {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+
+        /* Drop Cap for first paragraph */
+        p:first-of-type::first-letter {
+            font-size: 3.5rem;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.5rem;
+            font-weight: 700;
+            color: var(--nyt-black);
+        }
+
+        /* Visualization Containers - "Full Bleed" Feel */
+        figure {
+            margin: 3rem -4rem;
+            background: #fafafa;
+            padding: 2rem;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        figcaption {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .chart-note {
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 900px) {
+            figure {
+                margin: 3rem -1rem;
+            }
+        }
+
+        /* Interactive Controls */
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+
+        .toggle-btn {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 5px 15px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .toggle-btn.active {
+            background: var(--nyt-black);
+            color: white;
+            border-color: var(--nyt-black);
+        }
+
+        /* Methodology Section */
+        .methodology {
+            border-top: 4px solid #000;
+            margin-top: 5rem;
+            padding-top: 2rem;
+            background: #f8f9fa;
+            padding: 2rem;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+        }
+
+        .methodology h3 {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .methodology ul {
+            list-style-type: square;
+            padding-left: 1.2rem;
+            color: #555;
+        }
+
+        .methodology li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Highlight */
+        .highlight {
+            background-color: #ffeeb0;
+            padding: 2px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <article>
+        <span class="kicker">Strategic Analysis</span>
+        <h1>The Peakflo Chronicles:<br>Unlocking the Cash Trap</h1>
+
+        <div class="byline">
+            <div>By <strong>The Business Analysis Team</strong></div>
+            <span>May 22, 2024</span>
+        </div>
+
+        <!-- NARRATIVE START -->
+        <p>Meet <strong>Prompt Paul</strong>. Paul runs a mid-sized agency. He pays every invoice on Day 28, like
+            clockwork. He’s boring, reliable, and represents <span class="highlight">35% of our revenue</span>.</p>
+
+        <p>Now meet <strong>Chaotic Charlie</strong>. Charlie runs a fast-growing startup. He pays, eventually. Usually
+            15 days late. He loses emails. He forgets due dates.</p>
+
+        <p>For the last two years, our AR team has been treating Paul and Charlie exactly the same. We send them both a
+            "Just Checking In" email on Day 31. Paul gets annoyed. Charlie misses it.</p>
+
+        <!-- CHART 1: SEGMENTATION -->
+        <figure>
+            <figcaption>Figure 1. The Disconnect: Who We Chase vs. Who Owes Money</figcaption>
+            <div class="toggle-group">
+                <button class="toggle-btn active" onclick="updateSegmentChart('count')">View by # of Customers</button>
+                <button class="toggle-btn" onclick="updateSegmentChart('value')">View by $ Value</button>
+            </div>
+            <canvas id="segmentChart" height="250"></canvas>
+            <div class="chart-note">Source: Internal Transaction Data (2021-2022)</div>
+        </figure>
+
+        <h2>The 15-Day Gap</h2>
+        <p>When we re-built the finance timeline transaction-by-transaction, a startling pattern emerged. There is a
+            massive segment of <strong>153 customers</strong> (the yellow bar above) who consistently pay 12-16 days
+            late.</p>
+        <p>This isn't a cash flow problem for them. It's a <strong>workflow problem</strong>. They simply pay during
+            their mid-month check run.</p>
+        <p><strong>The Fix:</strong> We don't need a collections agent to call them. We just need to automate a "Nudge"
+            3 days <em>after</em> the due date.</p>
+
+        <!-- CHART 2: DSO TREND -->
+        <figure>
+            <figcaption>Figure 2. The Rising Cost of Waiting (DSO Trend)</figcaption>
+            <canvas id="dsoChart" height="200"></canvas>
+            <div class="chart-note">The Days Sales Outstanding (DSO) metric has drifted upward by ~20 days in Q1.</div>
+        </figure>
+
+        <h2>The "Ghost" in the Machine</h2>
+        <p>While everyone was worried about Charlie being 2 weeks late, the real villain was hiding in plain sight.
+            <strong>112 Accounts</strong> have accumulated millions in debt and have <em>never made a single
+                payment</em>.</p>
+        <p>Some of these accounts were still receiving "Friendly Reminder" emails. This is where the human element
+            failed. The data says: <strong>They are gone.</strong></p>
+
+        <h2>A Proper Ending</h2>
+        <p>By automating the "Nudge" for Charlie and immediately cutting off credit for the "Ghosts", we project a
+            significant recovery of trapped liquidity.</p>
+
+        <!-- CHART 3: FORECAST -->
+        <figure>
+            <figcaption>Figure 3. Projected Cash Flow Recovery (Next 3 Months)</figcaption>
+            <canvas id="forecastChart" height="200"></canvas>
+        </figure>
+
+    </article>
+
+    <!-- FOOTNOTES / EVIDENCE SECTION -->
+    <div class="methodology">
+        <article style="padding:0; margin:0;">
+            <h3>Methodology & Verification</h3>
+            <p>This analysis is based on a statistical audit of 17,692 invoice records. Before trusting the data, we
+                performed the following verification checks:</p>
+
+            <strong>Data Anomalies Detected</strong>
+            <ul>
+                <li><strong>Amount Due > Total Amount:</strong> Found in 25.7% of invoices (4,559 records). This anomaly
+                    likely represents accumulated penalties or data entry errors. <em>Note: Our forecast assumes
+                        accuracy of 'Amount Due' but flags this for Engineering review.</em></li>
+                <li><strong>Pre-payments:</strong> 28 instances confirmed where payment date preceded issue date.</li>
+            </ul>
+
+            <strong>Core Assumptions</strong>
+            <ul>
+                <li><strong>Missing Dates:</strong> We verified that every record with a missing
+                    <code>paid_on_date</code> has a positive outstanding balance. NULL strictly implies "Unpaid".</li>
+                <li><strong>Behavior Stability:</strong> 65% of customers showed a payment deviation of less than 10
+                    days, confirming that payment habits are highly predictable.</li>
+                <li><strong>Bad Debt Cutoff:</strong> Historical recovery rates drop below 5% once an invoice exceeds 90
+                    days overdue.</li>
+            </ul>
+            <p style="font-style: italic; margin-top: 1rem;">Analysis conducted using Python 3.8 and Scikit-Learn Random
+                Forest Regressor (Shadow Mode).</p>
+        </article>
+    </div>
+
+    <script>
+        // Data Loading
+        const data = window.peakfloData || { dsoData: [], segmentData: [], forecastData: { months: [], current: [], optimized: [] } };
+
+        // Chart Configuration (Minimalist NYT Style)
+        Chart.defaults.font.family = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+        Chart.defaults.color = "#888";
+
+        // 1. Segment Chart
+        let segmentChartRef = new Chart(document.getElementById('segmentChart'), {
+            type: 'bar',
+            data: {
+                labels: data.segmentData.map(d => d.name),
+                datasets: [{
+                    data: data.segmentData.map(d => d.count),
+                    backgroundColor: ['#4CAF50', '#FFC107', '#FF9800', '#D32F2F', '#212121'], // Green, Amber, Orange, Red, Black
+                    barPercentage: 0.6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
+                scales: { x: { grid: { display: false } }, y: { grid: { display: false }, ticks: { color: '#000', font: { weight: 'bold' } } } }
+            }
+        });
+
+        window.updateSegmentChart = (mode) => {
+            const newData = mode === 'count' ? data.segmentData.map(d => d.count) : data.segmentData.map(d => d.value);
+            segmentChartRef.data.datasets[0].data = newData;
+            segmentChartRef.update();
+            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        };
+
+        // 2. DSO Chart
+        new Chart(document.getElementById('dsoChart'), {
+            type: 'line',
+            data: {
+                labels: data.dsoData.map(d => d.month),
+                datasets: [{
+                    data: data.dsoData.map(d => d.dso),
+                    borderColor: '#b71c1c', // NYT Red
+                    borderWidth: 2,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#b71c1c',
+                    pointRadius: 4,
+                    tension: 0
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { borderDash: [2, 4], color: '#eee' } } }
+            }
+        });
+
+        // 3. Forecast Chart
+        new Chart(document.getElementById('forecastChart'), {
+            type: 'bar',
+            data: {
+                labels: data.forecastData.months,
+                datasets: [
+                    { label: 'Current Strategy', data: data.forecastData.current, backgroundColor: '#ddd' },
+                    { label: 'With Optimization', data: data.forecastData.optimized, backgroundColor: '#121212' }
+                ]
+            },
+            options: {
+                plugins: { legend: { position: 'bottom' } },
+                scales: { x: { grid: { display: false } }, y: { grid: { display: false } } }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
